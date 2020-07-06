@@ -1,0 +1,88 @@
+{{- $fullName := include "crafty-control-mc.fullname" . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "crafty-control-mc.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "crafty-control-mc.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "crafty-control-mc.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "crafty-control-mc.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if or .Values.persistence.servers.enabled .Values.persistence.db.enabled }}
+      volumes:
+        {{- if .Values.persistence.servers.enabled }}
+        - name: servers
+          persistentVolumeClaim:
+            claimName: {{ $fullName }}-servers
+        {{- end }}
+        {{- if .Values.persistence.db.enabled }}
+        - name: db
+          persistentVolumeClaim:
+            claimName: {{ $fullName}}-db
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /
+              port: https
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /
+              port: https
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if or .Values.persistence.servers.enabled .Values.persistence.db.enabled }}
+          volumeMounts:
+            {{- if .Values.persistence.servers.enabled }}
+            - name: servers
+              mountPath: "/mc_servers"
+            {{- end }}
+            {{- if .Values.persistence.db.enabled }}
+            - name: db
+              mountPath: "/crafty_db"
+            {{- end }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
