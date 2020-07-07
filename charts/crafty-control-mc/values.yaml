@@ -1,0 +1,138 @@
+# Default values for crafty-control-mc.
+# This is a YAML-formatted file.
+replicaCount: 1
+
+# image -- Standard image chart vaule with `repository`, `pullPolicy`, and `tag` keys.
+image:
+  repository: dkolb/crafty-controller
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+# imagePullSecrets -- Array of secret names to use for conatiner registry auth.
+imagePullSecrets: []
+
+# nameOverried -- Overrides places the chart name `crafty-control-mc` is used.
+nameOverride: ""
+
+# fullnameOverride -- Overrides places that utilize `release_name-crafty-control-mc`
+fullnameOverride: ""
+
+serviceAccount:
+  # serviceAccount.create -- Specifies whether a service account should be created
+  create: true
+  # serviceAccount.annotations -- Annotations to add to the service account
+  annotations: {}
+  # serviceAccount.name -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# podAnnotations -- An annotation object to apply to the pod.
+podAnnotations: {}
+
+# podSecurityContext -- maps directly into `Deployment.spec.template.spec.securityContext`
+# Reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podsecuritycontext-v1-core
+podSecurityContext: {}
+
+# securityContext -- Container specific security context applied to the crafty-controller context.
+# maps onto `Deployment.spec.template.spec.containers[*].securityContext`
+# Reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podsecuritycontext-v1-core
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  # service.type -- `LoadBalancer`, `ClusterIP`, `NodePort`
+  type: ClusterIP
+  # service.port -- Port to expose on service.
+  port: 443
+
+ingress:
+  # ingress.enabled -- Generate an ingress for the Web UI.
+  enabled: false
+  # ingress.class -- Add annotation for class of the ingress.
+  certManager: true
+  # ingress.annotations -- Place to add annotations to the ingress.
+  # Reminder: This is where your cluster issuers and ingress classes go, David.
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  # ingress.rules -- Abbreviated rules structure.
+  rules:
+    # ingress.host -- Host name for rule.
+    - host: crafty-mc.local
+      # ingress.paths -- An array of paths to route to the crafty web ui.
+      paths:
+        - "/"
+  # ingress.tls -- Contains SSL configurations.
+  # ```yaml
+  # ingress:
+  #   tls:
+  #     - secretName: chart-example-tls
+  #     hosts:
+  #       - crafty-mc.local
+  # ```
+  tls: []
+
+# resources -- Object containing limits and requests for the crafty-controller
+# container.
+# ```yaml
+# resources:
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
+# ```
+resources: {}
+
+# nodeSelector -- Refer to https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+nodeSelector: {}
+
+# tolerations -- Refer to https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+tolerations: []
+
+# affinity -- Refer to https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+
+persistence:
+  db:
+    # persistence.db.enabled -- Enables a PersistentVolumeClaim for the database
+    # and mounts it to `/crafty_db`
+    enabled: false
+    # persistence.db.annotations -- Set annotations directly on the PCV
+    annotations: {}
+    # persistence.db.storageClassName -- PCV storage class.
+    storageClassName: ""
+    # persistence.db.storageSize -- Size to attempt to claim
+    storageSize: 1Gi
+    # persistence.db.accessModes -- List of access modes, such as ReadWriteMany.
+    accessModes: []
+  servers:
+    # persistence.servers.annotations -- Set annotations directly on the PCV
+    # and mounts it to `/mincraft_servers`
+    enabled: false
+    # persistence.servers.storageClassName -- PCV storage class.
+    annotations: {}
+    # persistence.servers.storageClassName -- PCV storage class.
+    storageClassName: ""
+    # persistence.servers.storageSize -- Size to attempt to claim
+    storageSize: 20Gi
+    # persistence.servers.accessModes -- List of access modes, such as ReadWriteMany.
+    accessModes: []
+  backups:
+    # persistence.backups.annotations -- Set annotations directly on the PCV
+    # and mounts it to `/world_backups`
+    enabled: false
+    # persistence.backups.annotations -- Set annotations directly on the PCV
+    annotations: {}
+    # persistence.backups.storageClassName -- PCV storage class.
+    storageClassName: ""
+    # persistence.backups.storageSize -- Size to attempt to claim
+    storageSize: 100Gi
+    # persistence.backups.accessModes -- List of access modes, such as ReadWriteMany.
+    accessModes: []

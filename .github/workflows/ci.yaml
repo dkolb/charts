@@ -9,19 +9,23 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Fetch history
+      run: git fetch --prune --unshallow
     - name: Lint Charts
       uses: helm/chart-testing-action@master
       with:
         command: lint
         config: .github/ct.yaml
   lint-docs:
-    runs-on: ubuntu-latest
     needs: lint-chart
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Run helm-docs
-        run: .github/helm-docs.sh
+        run: docker run -v "$GITHUB_WORKSPACE:/helm-docs" jnorwood/helm-docs:latest
+      - name: Check diffs
+        run: git diff --exit-code
   kubeval-chart:
     runs-on: ubuntu-latest
     needs:
@@ -30,12 +34,9 @@ jobs:
     strategy:
       matrix:
         k8s:
-          - v1.12.10
-          - v1.13.12
-          - v1.14.10
-          - v1.15.11
-          - v1.16.8
-          - v1.17.4
+          - v1.16.12
+          - v1.17.8
+          - v1.18.5
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -53,12 +54,9 @@ jobs:
     strategy:
       matrix:
         k8s:
-          - v1.12.10
-          - v1.13.12
-          - v1.14.10
-          - v1.15.7
-          - v1.16.4
-          - v1.17.2
+          - v1.16.9
+          - v1.17.5
+          - v1.18.4
     steps:
       - name: Checkout
         uses: actions/checkout@v1

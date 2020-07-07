@@ -1,7 +1,12 @@
 apiVersion: v2
 name: crafty-control-mc
+home: https://github.com/dkolb/charts
 description: A helm chart to deploy the crafty-control-mc to your kubernetes cluster.
-
+maintainers:
+  - name: dkolb
+    email: david.c.kolb@gmail.com
+    url: https://github.com/dkolb
+icon: https://gitlab.com/crafty-controller/crafty-web/-/raw/master/app/web/static/images/crafty.png
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives

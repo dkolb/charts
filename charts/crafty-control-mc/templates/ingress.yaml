@@ -15,6 +15,10 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- if .Values.ingress.certManager }}
+  kubernetes.io/tls-acme: "true"
+  {{- end }}
+  nginx.ingress.kubernetes.io/backend-protocols: "HTTPS"
 spec:
   {{- if .Values.ingress.tls }}
   tls:
