@@ -1,0 +1,20 @@
+apiVersion: v1
+entries:
+  crafty-control-mc:
+  - apiVersion: v2
+    appVersion: 3.1.Final
+    created: "2020-07-07T23:16:46.150360436Z"
+    description: A helm chart to deploy the crafty-control-mc to your kubernetes cluster.
+    digest: 6b93ba541eba6d3d886643f1d330ac2e96016ded19fe8b03be626a6e4c5538a7
+    home: https://github.com/dkolb/charts
+    icon: https://gitlab.com/crafty-controller/crafty-web/-/raw/master/app/web/static/images/crafty.png
+    maintainers:
+    - email: david.c.kolb@gmail.com
+      name: dkolb
+      url: https://github.com/dkolb
+    name: crafty-control-mc
+    type: application
+    urls:
+    - https://github.com/dkolb/charts/releases/download/crafty-control-mc-0.0.1/crafty-control-mc-0.0.1.tgz
+    version: 0.0.1
+generated: "2020-07-07T23:16:45.991716238Z"
