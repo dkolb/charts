@@ -28,7 +28,7 @@ spec:
       serviceAccountName: {{ include "crafty-control-mc.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if or .Values.persistence.servers.enabled .Values.persistence.db.enabled }}
+      {{- if or .Values.persistence.servers.enabled .Values.persistence.db.enabled .Values.persistence.backups.enabled }}
       volumes:
         {{- if .Values.persistence.servers.enabled }}
         - name: servers
@@ -39,6 +39,11 @@ spec:
         - name: db
           persistentVolumeClaim:
             claimName: {{ $fullName}}-db
+        {{- end }}
+        {{- if .Values.persistence.backups.enabled }}
+        - name: backups
+          persistentVolumeClaim:
+            claimName: {{ $fullName}}-backups
         {{- end }}
       {{- end }}
       containers:
@@ -63,7 +68,7 @@ spec:
               port: https
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if or .Values.persistence.servers.enabled .Values.persistence.db.enabled }}
+          {{- if or .Values.persistence.servers.enabled .Values.persistence.db.enabled .Values.persistence.backups.enabled }}
           volumeMounts:
             {{- if .Values.persistence.servers.enabled }}
             - name: servers
@@ -72,6 +77,10 @@ spec:
             {{- if .Values.persistence.db.enabled }}
             - name: db
               mountPath: "/crafty_db"
+            {{- end }}
+            {{- if .Values.persistence.backups.enabled }}
+            - name: backups
+              mountPath: "/backups"
             {{- end }}
           {{- end }}
       {{- with .Values.nodeSelector }}

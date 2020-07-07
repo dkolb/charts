@@ -1,0 +1,20 @@
+{{- if .Values.persistence.backups.enabled -}}
+{{- $fullName := include "crafty-control-mc.fullname" . -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $fullName }}-backups
+  labels:
+    {{- include "crafty-control-mc.labels" . | nindent 4 }}
+  {{- with .Values.persistence.servers.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  storageClassName: {{ .Values.persistence.backups.storageClassName | quote }}
+  accessModes: 
+    {{- .Values.persistence.backups.accessModes | toYaml | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.backups.storageSize | quote }}
+{{- end }}

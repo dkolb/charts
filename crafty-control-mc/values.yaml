@@ -1,6 +1,5 @@
 # Default values for crafty-control-mc.
 # This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 replicaCount: 1
 
 image:
@@ -93,4 +92,11 @@ persistence:
     annotations: {}
     storageClassName: ""
     storageSize: 30Gi
+    accessModes: []
+  backups:
+    # This creates a PCV for backups.
+    enabled: false
+    annotations: {}
+    storageClassName: ""
+    storageSize: 100Gi
     accessModes: []
