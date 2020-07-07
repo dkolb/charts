@@ -1,0 +1,17 @@
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
+
+{{ template "chart.versionLine" . }}
+
+{{ template "chart.sourceLinkLine" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesHeader" . }}
+
+### Annotations
+
+All annotations values are simply key/value objects directly as if you
+were writing the k8s manifest.
+
+{{ template "chart.valuesTable" . }}

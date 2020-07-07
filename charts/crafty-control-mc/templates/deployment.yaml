@@ -80,7 +80,7 @@ spec:
             {{- end }}
             {{- if .Values.persistence.backups.enabled }}
             - name: backups
-              mountPath: "/backups"
+              mountPath: "/world_backups"
             {{- end }}
           {{- end }}
       {{- with .Values.nodeSelector }}
