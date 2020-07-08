@@ -2,7 +2,7 @@ crafty-control-mc
 =================
 A helm chart to deploy the crafty-control-mc to your kubernetes cluster.
 
-Current chart version is `0.0.1`
+Current chart version is `0.0.2`
 
 Source code can be found [here](https://github.com/dkolb/charts)
 
