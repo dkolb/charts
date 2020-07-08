@@ -15,10 +15,9 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if .Values.ingress.certManager }}
-  kubernetes.io/tls-acme: "true"
-  {{- end }}
-  nginx.ingress.kubernetes.io/backend-protocols: "HTTPS"
+    {{- if .Values.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
 spec:
   {{- if .Values.ingress.tls }}
   tls:
@@ -31,7 +30,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.ingress.rules }}
     - host: {{ .host | quote }}
       http:
         paths:

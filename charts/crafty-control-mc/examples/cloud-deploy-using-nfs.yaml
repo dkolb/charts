@@ -52,21 +52,19 @@ service:
 
 ingress:
   # ingress.enabled -- Generate an ingress for the Web UI.
-  enabled: false
+  enabled: enabled
   # ingress.class -- Add annotation for class of the ingress.
   certManager: true
   # ingress.annotations -- Place to add annotations to the ingress.
-  # Reminder: This is where your cluster issuers and ingress classes go.
-  # Also you probably should annotate however you need to to indicate that
-  # HTTPS is the backend protocol
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  # Reminder: This is where your cluster issuers and ingress classes go, David.
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   # ingress.rules -- Abbreviated rules structure.
   rules:
     # ingress.host -- Host name for rule.
-    - host: crafty-mc.local
+    - host: crafty.do.krinchan.com 
       # ingress.paths -- An array of paths to route to the crafty web ui.
       paths:
         - "/"
@@ -76,9 +74,12 @@ ingress:
   #   tls:
   #     - secretName: chart-example-tls
   #       hosts:
-  #         - crafty-mc.local
+  #       - crafty-mc.local
   # ```
-  tls: []
+  tls:
+    - secretName: crafty-tls
+      hosts:
+        - crafty.do.krinchan.com
 
 # resources -- Object containing limits and requests for the crafty-controller
 # container.
@@ -106,36 +107,39 @@ persistence:
   db:
     # persistence.db.enabled -- Enables a PersistentVolumeClaim for the database
     # and mounts it to `/crafty_db`
-    enabled: false
+    enabled: true
     # persistence.db.annotations -- Set annotations directly on the PCV
     annotations: {}
     # persistence.db.storageClassName -- PCV storage class.
-    storageClassName: ""
+    storageClassName: "nfs"
     # persistence.db.storageSize -- Size to attempt to claim
     storageSize: 1Gi
     # persistence.db.accessModes -- List of access modes, such as ReadWriteMany.
-    accessModes: []
+    accessModes:
+      - ReadWriteMany
   servers:
     # persistence.servers.annotations -- Set annotations directly on the PCV
     # and mounts it to `/mincraft_servers`
-    enabled: false
+    enabled: true
     # persistence.servers.storageClassName -- PCV storage class.
     annotations: {}
     # persistence.servers.storageClassName -- PCV storage class.
-    storageClassName: ""
+    storageClassName: "nfs"
     # persistence.servers.storageSize -- Size to attempt to claim
-    storageSize: 20Gi
+    storageSize: 1Gi
     # persistence.servers.accessModes -- List of access modes, such as ReadWriteMany.
-    accessModes: []
+    accessModes:
+      - ReadWriteMany
   backups:
     # persistence.backups.annotations -- Set annotations directly on the PCV
     # and mounts it to `/world_backups`
-    enabled: false
+    enabled: enabled
     # persistence.backups.annotations -- Set annotations directly on the PCV
     annotations: {}
     # persistence.backups.storageClassName -- PCV storage class.
-    storageClassName: ""
+    storageClassName: "nfs"
     # persistence.backups.storageSize -- Size to attempt to claim
-    storageSize: 100Gi
+    storageSize: 1Gi
     # persistence.backups.accessModes -- List of access modes, such as ReadWriteMany.
-    accessModes: []
+    accessModes:
+      - ReadWriteMany
