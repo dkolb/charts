@@ -1,6 +1,6 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.webui.ingress.enabled -}}
 {{- $fullName := include "crafty-control-mc.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
+{{- $svcPort := .Values.webui.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
@@ -8,20 +8,20 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-webui
   labels:
     {{- include "crafty-control-mc.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+  {{- with .Values.webui.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-    {{- if .Values.ingress.certManager }}
+    {{- if .Values.webui.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
 spec:
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.webui.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.webui.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -30,7 +30,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.rules }}
+    {{- range .Values.webui.ingress.rules }}
     - host: {{ .host | quote }}
       http:
         paths:

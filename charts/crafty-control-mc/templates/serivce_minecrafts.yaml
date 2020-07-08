@@ -1,0 +1,25 @@
+{{- if .Values.minecrafts -}}
+{{- $fullName := include "crafty-control-mc.fullname" . -}}
+{{- $labels := include "crafty-control-mc.labels" . | printf "\n%s" -}}
+{{- $selector := include "crafty-control-mc.selectorLabels" . -}}
+{{- range .Values.minecrafts -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-{{ .name }}
+  labels: 
+  {{- $labels | indent 4 }}
+  {{- with .service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .service.type }}
+  {{- with .service.ports }}
+  ports:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    {{- $selector | nindent 4 }}
+{{- end }}
+{{- end }}

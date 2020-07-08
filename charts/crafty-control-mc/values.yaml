@@ -44,41 +44,65 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
-  # service.type -- `LoadBalancer`, `ClusterIP`, `NodePort`
-  type: ClusterIP
-  # service.port -- Port to expose on service.
-  port: 443
+webui:
+  # webui.service -- This configures the service specifically for the webui.
+  service:
+    # webui.service.type -- `LoadBalancer`, `ClusterIP`, `NodePort`
+    type: ClusterIP
+    # webui.service.port -- Port to expose on service.
+    port: 443
 
-ingress:
-  # ingress.enabled -- Generate an ingress for the Web UI.
-  enabled: false
-  # ingress.class -- Add annotation for class of the ingress.
-  certManager: true
-  # ingress.annotations -- Place to add annotations to the ingress.
-  # Reminder: This is where your cluster issuers and ingress classes go.
-  # Also you probably should annotate however you need to to indicate that
-  # HTTPS is the backend protocol
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-  # ingress.rules -- Abbreviated rules structure.
-  rules:
-    # ingress.host -- Host name for rule.
-    - host: crafty-mc.local
-      # ingress.paths -- An array of paths to route to the crafty web ui.
-      paths:
-        - "/"
-  # ingress.tls -- Contains SSL configurations.
-  # ```yaml
-  # ingress:
-  #   tls:
-  #     - secretName: chart-example-tls
-  #       hosts:
-  #         - crafty-mc.local
-  # ```
-  tls: []
+  ingress:
+    # webui.ingress.enabled -- Generate an ingress for the Web UI.
+    enabled: false
+    # webui.ingress.certManager -- Add the certManager annotation to the
+    # ingress.
+    certManager: false
+    # webui.ingress.annotations -- Place to add annotations to the ingress.
+    # Reminder: This is where your cluster issuers and ingress classes go.
+    # Also you probably should annotate however you need to to indicate that
+    # HTTPS is the backend protocol
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # webui.ingress.rules -- Abbreviated rules structure.
+    rules:
+      # webui.ingress.host -- Host name for rule.
+      - host: crafty-mc.local
+        # webui.ingress.paths -- An array of paths to route to the crafty web ui.
+        paths:
+          - "/"
+    # webui.ingress.tls -- Contains SSL configurations.
+    # ```yaml
+    # webui:
+    #   ingress:
+    #     tls:
+    #       - secretName: chart-example-tls
+    #         hosts:
+    #           - crafty-mc.local
+    # ```
+    tls: []
+
+# minecrafts -- Populate this array with information on each minecraft server.
+minecrafts:
+    # minecrafts.name -- A name for the server. Appended to the full name
+    # forming {release name}-{chart name}-{name}
+  - name: my-minecraft
+    service:
+      # minecrafts.service.type -- The service type to implemement
+      type: NodePort
+      # minecrafts.service.port -- The service ports. Reference the ports
+      # stanza for your selected service type.
+      ports:
+        - name: gameserver
+          port: 25565
+          targetPort: 25565
+          protocol: TCP
+      # minecrafts.service.annotations -- The annotations to apply to the
+      # service
+      annotations: {}
+        # service.beta.kubernetes.io/do-loadbalancer-protocol: "tcp"
 
 # resources -- Object containing limits and requests for the crafty-controller
 # container.

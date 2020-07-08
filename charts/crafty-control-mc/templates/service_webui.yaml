@@ -5,9 +5,9 @@ metadata:
   labels:
     {{- include "crafty-control-mc.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.webui.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.webui.service.port }}
       targetPort: https
       protocol: TCP
       name: https
