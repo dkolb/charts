@@ -21,11 +21,11 @@ were writing the k8s manifest.
 | fullnameOverride | string | `""` | Overrides places that utilize `release_name-crafty-control-mc` |
 | image | object | `{"pullPolicy":"IfNotPresent","repository":"dkolb/crafty-controller","tag":"latest"}` | Standard image chart vaule with `repository`, `pullPolicy`, and `tag` keys. |
 | imagePullSecrets | list | `[]` | Array of secret names to use for conatiner registry auth. |
-| ingress.annotations | object | `{}` | Place to add annotations to the ingress. Reminder: This is where your cluster issuers and ingress classes go, David. |
+| ingress.annotations | object | `{}` | Place to add annotations to the ingress. Reminder: This is where your cluster issuers and ingress classes go. Also you probably should annotate however you need to to indicate that HTTPS is the backend protocol |
 | ingress.certManager | bool | `true` |  |
 | ingress.enabled | bool | `false` | Generate an ingress for the Web UI. |
 | ingress.rules | list | `[{"host":"crafty-mc.local","paths":["/"]}]` | Abbreviated rules structure. |
-| ingress.tls | list | `[]` | Contains SSL configurations. ```yaml ingress:   tls:     - secretName: chart-example-tls     hosts:       - crafty-mc.local ``` |
+| ingress.tls | list | `[]` | Contains SSL configurations. ```yaml ingress:   tls:     - secretName: chart-example-tls       hosts:         - crafty-mc.local ``` |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` | Refer to https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ |
 | persistence.backups.accessModes | list | `[]` | List of access modes, such as ReadWriteMany. |
