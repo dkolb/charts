@@ -2,7 +2,8 @@
 {{- $fullName := include "crafty-control-mc.fullname" . -}}
 {{- $labels := include "crafty-control-mc.labels" . | printf "\n%s" -}}
 {{- $selector := include "crafty-control-mc.selectorLabels" . -}}
-{{- range .Values.minecrafts -}}
+{{- range .Values.minecrafts }}
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -21,5 +22,6 @@ spec:
   {{- end }}
   selector:
     {{- $selector | nindent 4 }}
+
 {{- end }}
 {{- end }}
