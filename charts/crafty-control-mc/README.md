@@ -34,7 +34,7 @@ Most cloud provider load balancers support TCP balancing and can provide
 another way to get traffic into your cluster via a `LoadBalancer` service type
 and annotations on the service.
 
-Current chart version is `0.0.3`
+Current chart version is `0.0.4`
 
 Source code can be found [here](https://github.com/dkolb/charts)
 
