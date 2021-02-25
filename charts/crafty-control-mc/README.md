@@ -1,6 +1,8 @@
-crafty-control-mc
-=================
+# crafty-control-mc
+
 A helm chart to deploy the crafty-control-mc to your kubernetes cluster.
+
+![Version: 0.0.5](https://img.shields.io/badge/Version-0.0.5-informational?style=flat-square)
 
 ## Accessing inital password
 
@@ -9,9 +11,9 @@ use `kubectl logs` to retrieve the stdout logs.
 
 ## Initial server setup
 
-Depending on how you do your persistence, you may need to access the 
+Depending on how you do your persistence, you may need to access the
 pod to do the initial setup.  The crafty-controller docker container has
-wget installed so you can use `kubectl exec` to get a shell on the pod and 
+wget installed so you can use `kubectl exec` to get a shell on the pod and
 layout your server directories and do initial downloads.
 
 If you prefer you can create an empty file so long as it has a `.jar` extension
@@ -26,7 +28,7 @@ kinda makes some assumptions about how it's run, mainly that there is one
 pod per namespace and likely that pod targets a very specific instance.
 
 If you wish to use ClusterIP for the minecraft server services as opposed to
-NodeIP, you will need to write your own TCP Ingress.  The most popular, 
+NodeIP, you will need to write your own TCP Ingress.  The most popular,
 NGINX controller requires some work with setting up ConfigMaps and would make
 the chart less agnostic.
 
@@ -34,13 +36,7 @@ Most cloud provider load balancers support TCP balancing and can provide
 another way to get traffic into your cluster via a `LoadBalancer` service type
 and annotations on the service.
 
-Current chart version is `0.0.4`
-
-Source code can be found [here](https://github.com/dkolb/charts)
-
-
-
-## Chart Values
+## Values
 
 ### Annotations
 

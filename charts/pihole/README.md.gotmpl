@@ -1,4 +1,12 @@
 {{ template "chart.header" . }}
+Copied from https://github.com/MoJo2600/pihole-kubernetes
+
+(Go use his chart. Really. This is just because I don't trust anyone and helm
+doesn't really provide the sort of guarantees I want about a chart of a
+particular version being immutable beyond pulling it. This means that I have to
+carefully review each application of the chart. Just easier to stuff it in my
+own repo and copy over an update if I need to.)
+
 {{ template "chart.description" . }}
 
 {{ template "chart.versionBadge" .  }}{{ template "chart.typeBadge" .  }}{{ template "chart.appVersionBadge" .  }}<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->

@@ -1,4 +1,5 @@
 helm-extra-args: --timeout 600s
 check-version-increment: true
+excluded-charts: pihole
 debug: true
 target-branch: main

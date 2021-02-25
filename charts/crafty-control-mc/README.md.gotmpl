@@ -1,6 +1,8 @@
 {{ template "chart.header" . }}
 {{ template "chart.description" . }}
 
+{{ template "chart.versionBadge" . }}
+
 ## Accessing inital password
 
 You will want to run `kubectl get pod` to find the pod name and then
@@ -33,9 +35,7 @@ Most cloud provider load balancers support TCP balancing and can provide
 another way to get traffic into your cluster via a `LoadBalancer` service type
 and annotations on the service.
 
-{{ template "chart.versionLine" . }}
-
-{{ template "chart.sourceLinkLine" . }}
+{{ template "chart.sourcesSection" . }}
 
 {{ template "chart.requirementsSection" . }}
 
