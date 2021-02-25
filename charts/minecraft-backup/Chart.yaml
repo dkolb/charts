@@ -1,12 +1,12 @@
 apiVersion: v2
-name: crafty-control-mc
+name: minecraft-backup
+description: A Helm chart for Kubernetes
 home: https://github.com/dkolb/charts
-description: A helm chart to deploy the crafty-control-mc to your kubernetes cluster.
 maintainers:
   - name: dkolb
     email: david.c.kolb@gmail.com
     url: https://github.com/dkolb
-icon: https://gitlab.com/crafty-controller/crafty-web/-/raw/master/app/web/static/images/crafty.png
+
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives
@@ -20,9 +20,10 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.0.5
+version: 0.1.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
-appVersion: 3.1.Final
+# It is recommended to use it with quotes.
+appVersion: "1.16.0"

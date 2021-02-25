@@ -1,0 +1,116 @@
+# Default values for minecraft-backup.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+# -- Standard image chart value with `repository`, `pullPolicy`, and `tag` keys.
+image:
+  repository: ghcr.io/dkolb/minecraft-backup
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: edge
+
+# -- Array of secret names to use for conatiner registry auth.
+imagePullSecrets: []
+
+# -- Overrides places the chart name `crafty-control-mc` is used.
+nameOverride: ""
+
+# -- Overrides places that utilize `release_name-crafty-control-mc`
+fullnameOverride: ""
+
+# -- This is the argument passed to `source`. See minecraft-backup repo for usage.
+source: ""
+
+# -- This is the argument passed to `destination`. See minecraft-backup repo for usage.
+destination: ""
+
+# -- Set to true to pass the verbose flag to the container.
+verbose: true
+
+# -- Set to true to pass the dry-run flag to the container and not actually copy/delete backups.
+dryRun: false
+
+# -- The restart policy for the job container. Acceptable values are OnFailure or Never.
+# Never is highly advised as a failed job should require intervention.
+restartPolicy: Never
+
+runs:
+  -
+    # -- Passed in to the `backup-interval` argument (see minecraft-backup)
+    backupInterval: daily
+    # -- maps directly onto [CronJob's `.spec.schedule`](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/)
+    schedule: "0 5 * * *"
+  # -- .
+  -
+    backupInterval: weekly
+    schedule: "0 8 * * 0"
+  # -- .
+  -
+    backupInterval: monthly
+    schedule: "0 8 1 * *"
+  # -- .
+  -
+    backupInterval: yearly
+    schedule: "0 8 1 1 *"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- An annotation object to apply to the pod.
+podAnnotations: {}
+
+# -- Maps directly into `Deployment.spec.template.spec.securityContext`
+# Reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podsecuritycontext-v1-core
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# -- Container specific security context applied to the crafty-controller context.
+# maps onto `Deployment.spec.template.spec.containers[*].securityContext`
+# Reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podsecuritycontext-v1-core
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# -- Object containing limits and requests for the crafty-controller
+# container.
+# ```yaml
+# resources:
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
+# ```
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# -- Refer to https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+nodeSelector: {}
+
+# -- Refer to https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+tolerations: []
+
+# -- Refer to https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
