@@ -41,6 +41,13 @@ spec:
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
+              volumeMounts:
+                - name: rclone
+                  mountPath: "/root/.config/rclone"
+          volumes:
+            - name: rclone
+              secret:
+                secretName: {{ .Values.rcloneSecretName }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}

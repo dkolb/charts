@@ -21,10 +21,13 @@ nameOverride: ""
 fullnameOverride: ""
 
 # -- This is the argument passed to `source`. See minecraft-backup repo for usage.
-source: ""
+source: "source:/mc-backup.zip"
 
 # -- This is the argument passed to `destination`. See minecraft-backup repo for usage.
-destination: ""
+destination: "destination:/backups"
+
+# -- This secret is mounted to /root/.config/rclone/ in the container. It should contain your rclone.conf file at minimum.
+rcloneSecretName: "minecraft-backup-config"
 
 # -- Set to true to pass the verbose flag to the container.
 verbose: true
