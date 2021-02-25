@@ -68,6 +68,21 @@ entries:
   minecraft-backup:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-02-25T22:05:16.815826988Z"
+    description: A Helm chart for Kubernetes
+    digest: 2ed7f05fa1cd322ef6a67bdf897dd45dd3da95325d8036d1c6eea87c3d61f93e
+    home: https://github.com/dkolb/charts
+    maintainers:
+    - email: david.c.kolb@gmail.com
+      name: dkolb
+      url: https://github.com/dkolb
+    name: minecraft-backup
+    type: application
+    urls:
+    - https://github.com/dkolb/charts/releases/download/minecraft-backup-0.1.2/minecraft-backup-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-02-25T21:13:29.901668974Z"
     description: A Helm chart for Kubernetes
     digest: 2c9a443d677c2209fe235d08e9b4bb92d73cfd19adbe298021d652bf6050717c
@@ -120,4 +135,4 @@ entries:
     urls:
     - https://github.com/dkolb/charts/releases/download/pihole-1.8.29-dkolb1/pihole-1.8.29-dkolb1.tgz
     version: 1.8.29-dkolb1
-generated: "2021-02-25T21:13:30.004812652Z"
+generated: "2021-02-25T22:05:16.81585649Z"
