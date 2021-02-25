@@ -7,17 +7,23 @@ jobs:
   lint-chart:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Fetch history
-      run: git fetch --prune --unshallow
-    - name: Lint Charts
-      uses: helm/chart-testing-action@master
-      with:
-        command: lint
-        config: .github/ct.yaml
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Fetch history
+        run: git fetch --prune --unshallow
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Setup Chart Testing
+        uses: helm/chart-testing-action@v2.0.1
+      - name: Lint Chart
+        run: ct lint --config .github/ct.yaml
   lint-docs:
-    needs: lint-chart
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,51 +34,35 @@ jobs:
         run: docker run -v "$GITHUB_WORKSPACE:/helm-docs" jnorwood/helm-docs:latest
       - name: Check diffs
         run: git diff --exit-code
-  kubeval-chart:
-    runs-on: ubuntu-latest
-    needs:
-      - lint-chart
-      - lint-docs
-    strategy:
-      matrix:
-        k8s:
-          - v1.16.12
-          - v1.17.8
-          - v1.18.5
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Run kubeval
-        env:
-          KUBERNETES_VERSION: ${{ matrix.k8s }}
-        run: .github/kubeval.sh
   install-chart:
     name: install-chart
     runs-on: ubuntu-latest
     needs:
       - lint-chart
       - lint-docs
-      - kubeval-chart
     strategy:
       matrix:
         k8s:
-          - v1.16.9
-          - v1.17.5
-          - v1.18.4
+          - v1.17.17
+          - v1.18.15
+          - v1.19.7
+          - v1.20.2
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Setup Chart Testing
+        uses: helm/chart-testing-action@v2.0.1
       - name: Create kind ${{ matrix.k8s }} cluster
         uses: helm/kind-action@master
         with:
           node_image: kindest/node:${{ matrix.k8s }}
-      - name: Run chart-testing (install)
-        uses: helm/chart-testing-action@master
-        with:
-          command: install
-          config: .github/ct.yaml
-        
+      - name: Install Charts
+        run: ct install --config .github/ct.yaml
